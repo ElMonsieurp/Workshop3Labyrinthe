@@ -28,8 +28,11 @@ var timer3=0;
 var direction3=0;
 var timerreset3=1;
 var pointdevie=2;
-var invincibilite=100;
+var jeanjean=50;
 var score=0;
+var timer4=0;
+var direction4=0;
+var timerreset4=1;
 function init(){
  	var platforms;
 	var player;
@@ -46,8 +49,12 @@ function init(){
 	var timer3;
 	var timerreset3;
 	var direction3;
+	var timer4;
+	var timerreset4;
+	var direction4;
 	var pointdevie;
 	var invincibilite;
+	var jeanjean;
 	var scoreTexte;
 	var star;
 	var score;
@@ -60,8 +67,8 @@ function preload(){
 	this.load.image('solmoyen','image2/platformmoyenne.png');
 	this.load.image('solpetit','image2/platformpetite.png');
 	this.load.image('solhaut','image2/platformlonguehauteur.png');
-	this.load.spritesheet('perso','image2/blabla.png',{frameWidth: 32, frameHeight: 32});
-	this.load.spritesheet('garde','image2/blabla.png',{frameWidth: 40, frameHeight: 36});
+	this.load.image('perso','image2/meufvududessus.png',{frameWidth: 32, frameHeight: 32});
+	this.load.image('garde','image2/flicvududessus.png',{frameWidth: 40, frameHeight: 36});
 	this.load.image('etoile','image2/etoile.png');
 }
 
@@ -69,7 +76,7 @@ function preload(){
 
 function create(){
 	
-	this.add.image(400,300,'background');
+	this.add.image(960,540,'background');
 	platforms = this.physics.add.staticGroup();
 	
 	platforms.create(100,480,'sol');
@@ -241,6 +248,7 @@ platforms.create(0,630,'solhaut');
 			platforms.create(1520,610,'solhaut');
 				platforms.create(1520,742,'solhaut');
 				
+				
 					platforms.create(1800,610,'solhaut');
 				platforms.create(1800,742,'solhaut');
 					platforms.create(1800,510,'solhaut');
@@ -262,8 +270,7 @@ platforms.create(0,630,'solhaut');
 	
 		stars = this.physics.add.group({
 		key : 'etoile',
-		repeat: 2,
-		setXY: {x:500,y:630,stepX:300},
+		setXY: {x:500,y:630,},
 	
 		});
 	this.physics.add.collider(stars,platforms);
@@ -271,8 +278,7 @@ platforms.create(0,630,'solhaut');
 	
 		stars = this.physics.add.group({
 		key : 'etoile',
-		repeat: 2,
-		setXY: {x:100,y:730,stepX:100},
+		setXY: {x:100,y:840},
 	
 		});
 	this.physics.add.collider(stars,platforms);
@@ -280,8 +286,7 @@ platforms.create(0,630,'solhaut');
 	
 		stars = this.physics.add.group({
 		key : 'etoile',
-		repeat: 3,
-		setXY: {x:470,y:40,stepY:100},
+		setXY: {x:470,y:40},
 	
 		});
 	this.physics.add.collider(stars,platforms);
@@ -295,15 +300,16 @@ platforms.create(0,630,'solhaut');
 	this.physics.add.collider(stars,platforms);
 	this.physics.add.overlap(player,stars,collectStar,null,this);
 	
-		this.physics.add.collider(stars,platforms);
-	this.physics.add.overlap(player,stars,collectStar,null,this);
+		
 	
 		stars = this.physics.add.group({
 		key : 'etoile',
-		repeat: 5,
-		setXY: {x:500,y:740,stepX:100},
+		setXY: {x:500,y:740},
 	
 		});
+		
+		this.physics.add.collider(stars,platforms);
+	this.physics.add.overlap(player,stars,collectStar,null,this);
 	
 	garde1 = this.physics.add.sprite(1330,729,'garde');
 	garde1.setCollideWorldBounds(true);
@@ -325,40 +331,19 @@ platforms.create(0,630,'solhaut');
 	this.physics.add.collider(garde3,platforms);
 	this.physics.add.collider(player,garde3, hitgarde, null, this);
 	
+	garde4 = this.physics.add.sprite(1084,744,'garde');
+	garde4.setCollideWorldBounds(true);
+	garde4.body.setGravityY(000);
+	this.physics.add.collider(garde4,platforms);
+	this.physics.add.collider(player,garde4, hitgarde, null, this);
+	
 	
 	cursors = this.input.keyboard.createCursorKeys(); 
 	dasht= this.input.keyboard.addKey('W');
 	
-	this.anims.create({
-		key:'stop',
-		frames: this.anims.generateFrameNumbers('perso', {start: 1, end: 1}),
-		frameRate: 1,
-		repeat: -1
-	});
 	
-	this.anims.create({
-		key:'left',
-		frames: this.anims.generateFrameNumbers('perso', {start: 6, end: 8}),
-		frameRate: 10,
-		repeat : -1
-	});
-	
-	this.anims.create({
-		key:'up',
-		frames: this.anims.generateFrameNumbers('perso', {start: 9, end: 11}),
-		frameRate: 10,
-		repeat : -1
-	});
-	
-	this.anims.create({
-		key:'down',
-		frames: this.anims.generateFrameNumbers('perso', {start: 0, end: 2}),
-		frameRate: 10,
-		repeat : -1
-	});
-	
-		endurance = this.add.text(20,1006,'Vie : ', {fontSize: '62px', fill:'#FFF'});
-		scoreText = this.add.text(20,950,'Score: 0', {fontSize: '62px', fill:'#F00'});
+		endurance = this.add.text(20,1006,'Vie ', {fontSize: '62px', fill:'#FFF'});
+		scoreText = this.add.text(20,950,'Cle a molette 0', {fontSize: '62px', fill:'#F00'});
 }
 
 
@@ -366,12 +351,12 @@ platforms.create(0,630,'solhaut');
 function update(){
 	if (cursors.left.isDown) {
 	player.setVelocityX(-300);
-	player.setFlipX(true);
+	
 	} 
 	
 	if (cursors.right.isDown) {
 		player.setVelocityX(300);
-	player.setFlipX(false);		
+		
 	}
 	
 	if (cursors.up.isDown) {
@@ -391,20 +376,20 @@ function update(){
 	}
 	
 	if (cursors.up.isUp && cursors.down.isUp && cursors.left.isUp && cursors.right.isUp) {
-	player.anims.play('stop', true);
+
 	}
 	
-	if (Math.abs(player.body.velocity.x) < 0) {
-	player.anims.play('left', true);	
+	if (cursors.right.isDown) {
+	 player.angle=90;
 	}
-	else if (Math.abs(player.body.velocity.x) > 0) {
-	player.anims.play('left', true);		
+	else if (cursors.left.isDown) {
+	player.angle=270;
 	}
 	else if (cursors.up.isDown) {
-	player.anims.play('up', true);	
+	player.angle=360;	
 	}
 	else if (Math.abs(player.body.velocity.y) > 0) {
-	player.anims.play('down', true);		
+	player.angle=180;	
 	}
 	if (timer<1000) {
 	timer=timer+1;	
@@ -412,6 +397,7 @@ function update(){
 	
 	if (direction==0) {
 	garde1.setVelocityY(-100);
+	garde1.angle=360;
 	if (timerreset==1) {
 	timer=550;
 	timerreset=0;
@@ -423,6 +409,7 @@ function update(){
 	}
 	if (direction==1) {
 	garde1.setVelocityX(-100);
+	garde1.angle=270;
 	if (timerreset==1) {
 	timer=810;
 	timerreset=0;
@@ -435,6 +422,7 @@ function update(){
 	
 	if (direction==2) {
 	garde1.setVelocityY(100);
+	garde1.angle=180;
 	if (timerreset==1) {
 	timer=650;
 	timerreset=0;
@@ -447,6 +435,7 @@ function update(){
 	
 	if (direction==3) {
 	garde1.setVelocityX(100);
+	garde1.angle=90;
 	if (timerreset==1) {
 	timer=850;
 	timerreset=0;
@@ -459,6 +448,7 @@ function update(){
 	
 	if (direction==4) {
 	garde1.setVelocityY(-100);
+	garde1.angle=360;
 	if (timerreset==1) {
 	timer=680;
 	timerreset=0;
@@ -471,6 +461,7 @@ function update(){
 	
 		if (direction==5) {
 	garde1.setVelocityX(-100);
+	garde1.angle=270;
 	if (timerreset==1) {
 	timer=880;
 	timerreset=0;
@@ -488,6 +479,7 @@ function update(){
 	
 	if (direction2==0) {
 	garde2.setVelocityY(200);
+	garde2.angle=180;
 	if (timerreset2==1) {
 	timer2=989;
 	timerreset2=0;
@@ -499,6 +491,7 @@ function update(){
 	}
 	if (direction2==1) {
 	garde2.setVelocityX(100);
+	garde2.angle=90;
 	if (timerreset2==1) {
 	timer2=798;
 	timerreset2=0;
@@ -511,6 +504,7 @@ function update(){
 	
 	if (direction2==4) {
 	garde2.setVelocityY(-200);
+	garde2.angle=360;
 	if (timerreset2==1) {
 	timer2=899;
 	timerreset2=0;
@@ -526,6 +520,7 @@ function update(){
 	
 	if (direction2==5) {
 	garde2.setVelocityX(100);
+	garde2.angle=90;
 	if (timerreset2==1) {
 	timer2=898;
 	timerreset2=0;
@@ -538,6 +533,7 @@ function update(){
 	
 	if (direction2==6) {
 	garde2.setVelocityY(200);
+	garde2.angle=180;
 	if (timerreset2==1) {
 	timer2=799;
 	timerreset2=0;
@@ -555,6 +551,7 @@ if (timer3<900) {
 	}
 	if (direction3==0) {
 	garde3.setVelocityX(200);
+	garde3.angle=90;
 	if (timerreset3==1) {
 	timer3=830;
 	timerreset3=0;
@@ -567,6 +564,7 @@ if (timer3<900) {
 	}
 	if (direction3==1) {
 	garde3.setVelocityY(200);
+	garde3.angle=180;
 	if (timerreset3==1) {
 	timer3=729;
 	timerreset3=0;
@@ -579,6 +577,7 @@ if (timer3<900) {
 	}
 	if (direction3==2) {
 	garde3.setVelocityY(-200);
+	garde3.angle=360;
 	if (timerreset3==1) {
 	timer3=729;
 	timerreset3=0;
@@ -591,6 +590,7 @@ if (timer3<900) {
 	}
 	if (direction3==3) {
 	garde3.setVelocityX(-200);
+	garde3.angle=270;
 	if (timerreset3==1) {
 	timer3=830;
 	
@@ -605,26 +605,107 @@ if (timer3<900) {
 	}
 	
 
+//garde 4
 
+if (timer4<900) {
+	timer4=timer4+1;	
+	}
+	if (direction4==0) {
+	garde4.setVelocityX(200);
+	garde4.angle=90;
+	if (timerreset4==1) {
+	timer4=830;
+	timerreset4=0;
+	}
+	if (timer4==900) {
+	direction4=1;
+	timerreset4=1;
+	garde4.setVelocityX(0);
+	}}
+	if (direction4==1) {
+	garde4.setVelocityX(-200);
+	garde4.angle=270;
+	if (timerreset4==1) {
+	timer4=630;
+	timerreset4=0;
+	}
+	if (timer4==900) {
+	direction4=2;
+	timerreset4=1;
+	garde4.setVelocityX(0);}}
+	
+		if (direction4==2) {
+	garde4.setVelocityY(90);
+	garde4.angle=180;
+	if (timerreset4==1) {
+	timer4=830;
+	timerreset4=0;
+	}
+	if (timer4==900) {
+	direction4=3;
+	timerreset4=1;
+	garde4.setVelocityY(0);}}
+	
+		if (direction4==3) {
+	garde4.setVelocityY(-90);
+	garde4.angle=360;
+	if (timerreset4==1) {
+	timer4=830;
+	timerreset4=0;
+	}
+	if (timer4==900) {
+	direction4=4;
+	timerreset4=1;
+	garde4.setVelocityY(0);}}
+	
+		if (direction4==4) {
+	garde4.setVelocityX(200);
+	garde4.angle=90;
+	if (timerreset4==1) {
+	timer4=630;
+	timerreset4=0;
+	}
+	if (timer4==900) {
+	direction4=5;
+	timerreset4=1;
+	garde4.setVelocityX(0);}}
+	
+			if (direction4==5) {
+	garde4.setVelocityX(-200);
+	garde4.angle=270;
+	if (timerreset4==1) {
+	timer4=630;
+	timerreset4=0;
+	}
+	if (timer4==900) {
+	direction4=2;
+	timerreset4=1;
+	;}}
+	
 
-
-	if (invincibilite<30) {
-	invincibilite=invincibilite+1;
+	if (jeanjean<50) {
+	jeanjean=jeanjean+1;
 	player.setTint(0xff0000);
 	}
-	if (invincibilite==30) {
-	player.clearTint();
+	if (jeanjean==50 && pointdevie>0) {
+	player.clearTint();	
 	}
 	
-	endurance.setText('Vie : '+pointdevie);
+	endurance.setText('Vie '+pointdevie);
+
 }
 
+function gagner() {
+ if (player.Y>890) {
+  score=player.x;
+ }	 
+}
 
 function hitgarde(player, garde1){
 	pointdevie=pointdevie-1;
 	
 	if (pointdevie==1) {
-	invincibilite=0;
+		jeanjean=0;
 	player.setY(530);
     player.setX(50);
 	}
@@ -638,13 +719,15 @@ function hitgarde(player, garde1){
 
 function hitgarde(player, garde2){
 	pointdevie=pointdevie-1;
+	
 	if (pointdevie==1) {
-			invincibilite=0;
+	jeanjean=0;
 	player.setY(530);
     player.setX(50);
 	}
 	
 	if (pointdevie==0) {
+	
 	this.physics.pause();
 	player.setTint(0xff0000);
 	player.anims.play('turn');
@@ -652,7 +735,43 @@ function hitgarde(player, garde2){
 	}
 }
 
+function hitgarde(player, garde3){
+	pointdevie=pointdevie-1;
+	
+	if (pointdevie==1) {
+	jeanjean=0;
+	player.setY(530);
+    player.setX(50);
+	}
+	
+	if (pointdevie==0) {
+	
+	this.physics.pause();
+	player.setTint(0xff0000);
+	gameOver=true;
+	}
+}
+
+function hitgarde(player, garde4){
+	pointdevie=pointdevie-1;
+	
+	if (pointdevie==1) {
+	jeanjean=0;
+	player.setY(530);
+    player.setX(50);
+	}
+	
+	if (pointdevie==0) {
+	
+	this.physics.pause();
+	player.setTint(0xff0000);
+	gameOver=true;
+	}
+}
+
+
+
 function collectStar(player, star){
 	star.disableBody(true,true);
 	score += 1;
-scoreText.setText('score: '+score);}
+scoreText.setText('Cle a molettes '+score);}
