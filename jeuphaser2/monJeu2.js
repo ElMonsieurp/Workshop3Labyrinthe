@@ -399,7 +399,7 @@ function update(){
 	garde1.setVelocityY(-100);
 	garde1.angle=360;
 	if (timerreset==1) {
-	timer=550;
+	timer=350;
 	timerreset=0;
 	}
 	if (timer==1000) {
@@ -690,16 +690,21 @@ if (timer4<900) {
 	if (jeanjean==50 && pointdevie>0) {
 	player.clearTint();	
 	}
+	 if (player.y>900) {
+		if (score==5) {
+    player.play('turn');
+	gameOver=true;
+	endurance.setText('Vous avez reussi à sortir de l usine');
+	} else {
+	player.setY(530);
+    player.setX(50);	
+	}
 	
-	endurance.setText('Vie '+pointdevie);
-
+}
+endurance.setText('Vie '+pointdevie);
+	
 }
 
-function gagner() {
- if (player.Y>890) {
-  score=player.x;
- }	 
-}
 
 function hitgarde(player, garde1){
 	pointdevie=pointdevie-1;
@@ -712,7 +717,7 @@ function hitgarde(player, garde1){
 	if (pointdevie==0) {
 	this.physics.pause();
 	player.setTint(0xff0000);
-	player.anims.play('turn');
+	player.play('turn');
 	gameOver=true;
 	}
 }
@@ -730,7 +735,7 @@ function hitgarde(player, garde2){
 	
 	this.physics.pause();
 	player.setTint(0xff0000);
-	player.anims.play('turn');
+	player.play('turn');
 	gameOver=true;
 	}
 }
